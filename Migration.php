@@ -22,6 +22,11 @@ abstract class Migration extends Component implements MigrationInterface
     public $db = 'clickhouse';
 
     /**
+     * @var bool
+     */
+    public $compact = false;
+
+    /**
      * {@inheritDoc}
      * @throws InvalidConfigException
      */
@@ -119,7 +124,9 @@ abstract class Migration extends Component implements MigrationInterface
      */
     protected function beginCommand($description)
     {
-        echo "    > $description ...";
+        if (!$this->compact) {
+            echo "    > $description ...";
+        }
 
         return microtime(true);
     }
@@ -132,6 +139,8 @@ abstract class Migration extends Component implements MigrationInterface
      */
     protected function endCommand($time)
     {
-        echo ' done (time: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
+        if (!$this->compact) {
+            echo ' done (time: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
+        }
     }
 }
